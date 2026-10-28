@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#6d28d9">
+<meta name="description" content="صارحني — مساحة لمشاركة الكلمات والرد عليها عبر رابط.">
+<title>صارحني | Sarhani</title>
+
+<style>
+:root {
+--purple: #6d28d9;
+--purple-dark: #4c1d95;
+--purple-light: #f3e8ff;
+--bg: #faf8ff;
+--white: #ffffff;
+--text: #24183b;
+--muted: #786d89;
+--border: #e9e2f2;
+--success: #15803d;
+--shadow: 0 12px 35px rgba(76, 29, 149, .09);
+}
+
+* { box-sizing: border-box; }
+
+body {
+margin: 0;
+font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+background: var(--bg);
+color: var(--text);
+line-height: 1.8;
+}
+
+button, input, textarea { font: inherit; }
+button { cursor: pointer; }
+a { color: inherit; }
+
+.topbar {
+background: rgba(255,255,255,.94);
+border-bottom: 1px solid var(--border);
+position: sticky;
+top: 0;
+z-index: 5;
+backdrop-filter: blur(12px);
+}
+
+.nav {
+max-width: 980px;
+margin: auto;
+padding: 12px 18px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 12px;
+}
+
+.brand {
+display: flex;
+align-items: center;
+gap: 10px;
+font-size: 21px;
+font-weight: 850;
+color: var(--purple-dark);
+text-decoration: none;
+}
+
+.brand-icon {
+display: grid;
+place-items: center;
+width: 42px;
+height: 42px;
+border-radius: 15px;
+color: white;
+background: linear-gradient(135deg, #8b5cf6, #5b21b6);
+box-shadow: 0 5px 14px #6d28d933;
+}
+
+.nav-actions { display: flex; gap: 8px; }
+
+.container {
+width: min(100% - 30px, 760px);
+margin: 28px auto 60px;
+}
+
+.hero {
+position: relative;
+overflow: hidden;
+text-align: center;
+padding: 35px 20px 30px;
+border-radius: 26px;
+background: linear-gradient(140deg, #ede9fe, #fff 72%);
+border: 1px solid #e6dcff;
+margin-bottom: 22px;
+}
+
+.hero::before, .hero::after {
+content: "";
+position: absolute;
+border-radius: 50%;
+background: #c4b5fd44;
+pointer-events: none;
+}
+
+.hero::before { width: 140px; height: 140px; top: -75px; right: -45px; }
+.hero::after { width: 100px; height: 100px; bottom: -55px; left: -20px; }
+
+.hero > * { position: relative; }
+.hero h1 { font-size: clamp(28px, 6vw, 42px); line-height: 1.35; margin: 8px 0; }
+.hero h1 span { color: var(--purple); }
+.hero p { color: var(--muted); max-width: 460px; margin: 8px auto 18px; }
+
+.pill {
+display: inline-block;
+border-radius: 999px;
+background: #fff;
+color: var(--purple-dark);
+padding: 4px 12px;
+border: 1px solid #e9d5ff;
+font-size: 13px;
+font-weight: 700;
+}
+
+.card {
+background: var(--white);
+border: 1px solid var(--border);
+border-radius: 22px;
+padding: 22px;
+margin-bottom: 18px;
+box-shadow: var(--shadow);
+}
+
+.card h2 { margin: 0 0 5px; font-size: 21px; }
+.sub { color: var(--muted); margin: 0 0 17px; font-size: 14px; }
+
+label {
+display: block;
+font-weight: 700;
+margin: 14px 0 6px;
+font-size: 14px;
+}
+
+input, textarea {
+width: 100%;
+border: 1px solid var(--border);
+background: #fdfcff;
+color: var(--text);
+border-radius: 13px;
+padding: 12px 14px;
+outline: none;
+transition: border .2s, box-shadow .2s;
+}
+
+input:focus, textarea:focus {
+border-color: #a78bfa;
+box-shadow: 0 0 0 3px #8b5cf622;
+}
+
+textarea { min-height: 130px; resize: vertical; }
+input::placeholder, textarea::placeholder { color: #a49aaf; }
+
+.btn {
+border: 0;
+border-radius: 13px;
+padding: 11px 17px;
+font-weight: 750;
+display: inline-flex;
+align-items: center;
+justify-content: center;
+gap: 7px;
+text-decoration: none;
+transition: transform .15s, opacity .15s;
+}
+
+.btn:active { transform: scale(.98); }
+.btn-primary { color: white; background: linear-gradient(135deg, #7c3aed, #5b21b6); }
+.btn-light { color: var(--purple-dark); background: var(--purple-light); }
+.btn-outline { color: var(--purple-dark); background: white; border: 1px solid var(--border); }
+.btn-danger { color: #b91c1c; background: #fef2f2; }
+.btn-block { width: 100%; margin-top: 15px; }
+.btn-small { padding: 7px 11px; font-size: 13px; border-radius: 10px; }
+
+.row { display: flex; gap: 9px; flex-wrap: wrap; align-items: center; }
+.row > .grow { flex: 1; min-width: 0; }
+
+.notice {
+padding: 11px 13px;
+border-radius: 12px;
+font-size: 13px;
+margin-top: 13px;
+background: #f5f3ff;
+color: #5b21b6;
+}
+
+.notice.success { background: #f0fdf4; color: var(--success); }
+.notice.warning { background: #fff7ed; color: #9a3412; }
+
+.message-box {
+white-space: pre-wrap;
+overflow-wrap: anywhere;
+background: linear-gradient(135deg, #faf5ff, #fff);
+border: 1px solid #e9d5ff;
+border-radius: 16px;
+padding: 18px;
+min-height: 80px;
+margin: 15px 0;
+}
+
+.reply-heading {
+display: flex;
+align-items: center;
+gap: 10px;
+margin: 22px 0 8px;
+}
+
+.reply-icon {
+width: 38px;
+height: 38px;
+display: grid;
+place-items: center;
+background: var(--purple-light);
+color: var(--purple);
+border-radius: 12px;
+font-size: 20px;
+}
+
+.profile-row { display: flex; align-items: center; gap: 14px; margin-bottom: 15px; }
+.avatar {
+width: 58px;
+height: 58px;
+flex-shrink: 0;
+border-radius: 19px;
+display: grid;
+place-items: center;
+color: white;
+font-size: 23px;
+font-weight: 800;
+background: linear-gradient(135deg, #a78bfa, #6d28d9);
+overflow: hidden;
+}
+
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.muted { color: var(--muted); font-size: 13px; }
+.hidden { display: none !important; }
+
+.list-item {
+padding: 14px 0;
+border-bottom: 1px solid var(--border);
+}
+
+.list-item:last-child { border-bottom: 0; }
+.list-item p { margin: 7px 0; overflow-wrap: anywhere; }
+.list-item a { color: var(--purple); }
+
+.footer {
+text-align: center;
+color: var(--muted);
+font-size: 13px;
+padding: 15px 0;
+}
+
+.footer strong { color: var(--purple-dark); }
+.tabs { display: flex; gap: 8px; margin-bottom: 18px; }
+.tabs button { flex: 1; }
+.small-link { color: var(--purple); font-weight: 700; cursor: pointer; background: none; border: 0; padding: 0; }
+
+@media (max-width: 520px) {
+.container { width: min(100% - 20px, 760px); margin-top: 16px; }
+.nav { padding: 9px 12px; }
+.brand { font-size: 18px; }
+.brand-icon { width: 38px; height: 38px; }
+.hero { padding: 28px 14px 24px; border-radius: 21px; }
+.card { padding: 17px; border-radius: 18px; }
+.nav-actions .btn { padding: 8px 10px; font-size: 13px; }
+}
+</style>
+</head>
+
+<body>
+<header class="topbar">
+<nav class="nav">
+<a class="brand" href="#" onclick="goHome(); return false;">
+<span class="brand-icon">✉</span>
+<span>صارحني</span>
+</a>
+<div class="nav-actions">
+<button class="btn btn-light" onclick="showProfile()">حسابي</button>
+<button class="btn btn-outline" onclick="goHome()">الرئيسية</button>
+</div>
+</nav>
+</header>
+
+<main class="container">
+<section class="hero" id="hero">
+<span class="pill">كلام من القلب، ورابط واحد</span>
+<h1>مساحة للكلام <span>بصراحة</span></h1>
+<p>اكتب رسالتك، شارك رابطها، واستقبل الردود. خلي الكلام يوصل بطريقة بسيطة.</p>
+<button class="btn btn-primary" onclick="focusComposer()">✍ اكتب رسالة جديدة</button>
+</section>
+
+<section id="homeView">
+<section class="card" id="composer">
+<h2>رسالة جديدة</h2>
+<p class="sub">اكتب الرسالة التي تريد مشاركتها، ثم أنشئ رابطًا لها.</p>
+<label for="senderName">اسمك أو اسم مستعار</label>
+<input id="senderName" maxlength="60" placeholder="مثال: نور">
+<label for="messageText">محتوى الرسالة</label>
+<textarea id="messageText" maxlength="3000" placeholder="اكتب ما تريد قوله هنا..."></textarea>
+<div class="muted" id="charCount">0 / 3000</div>
+<button class="btn btn-primary btn-block" onclick="createMessage()">إنشاء رابط الرسالة ←</button>
+<div id="createResult"></div>
+</section>
+
+<section class="card">
+<h2>رسائل على هذا الجهاز</h2>
+<p class="sub">تجربة أولية: الرسائل هنا محفوظة في متصفح هذا الجهاز فقط.</p>
+<div id="myMessages"><p class="muted">لم تنشئ رسائل بعد.</p></div>
+</section>
+</section>
+
+<section id="messageView" class="hidden">
+<section class="card">
+<div class="profile-row">
+<div class="avatar" id="messageAvatar">ص</div>
+<div>
+<strong id="messageSender">رسالة من صارحني</strong>
+<div class="muted">رسالة تمت مشاركتها معك</div>
+</div>
+</div>
+<h2>الرسالة</h2>
+<div class="message-box" id="messageContent"></div>
+<div class="notice warning" id="missingMessageNotice">
+لو فتحت هذا الرابط على جهاز مختلف، فقد لا تظهر الرسالة في النسخة التجريبية؛ لأن التخزين لم يُربط بالخادم بعد.
+</div>
+
+<div class="reply-heading">
+<div class="reply-icon">↩</div>
+<div>
+<strong>اكتب ردك</strong>
+<div class="muted">ردّ على الرسالة وأنشئ رابطًا جديدًا.</div>
+</div>
+</div>
+<label for="replyName">اسمك (اختياري)</label>
+<input id="replyName" maxlength="60" placeholder="اسمك أو اسم مستعار">
+<label for="replyText">ردك</label>
+<textarea id="replyText" maxlength="3000" placeholder="اكتب ردك هنا..."></textarea>
+<button class="btn btn-primary btn-block" onclick="createReply()">إنشاء رابط الرد ←</button>
+<div id="replyResult"></div>
+</section>
+</section>
+
+<section id="profileView" class="hidden">
+<section class="card">
+<h2>ملفي الشخصي</h2>
+<p class="sub">هذه بيانات تجريبية محفوظة على هذا الجهاز فقط.</p>
+<div class="profile-row">
+<div class="avatar" id="profileAvatar">ص</div>
+<div>
+<strong id="profileDisplayName">زائر صارحني</strong>
+<div class="muted">ملف شخصي تجريبي</div>
+</div>
+</div>
+<label for="profileName">الاسم الظاهر</label>
+<input id="profileName" maxlength="60" placeholder="اكتب اسمك">
+<label for="profileInstagram">رابط Instagram (اختياري)</label>
+<input id="profileInstagram" type="url" placeholder="https://instagram.com/username">
+<label for="profileTiktok">رابط TikTok (اختياري)</label>
+<input id="profileTiktok" type="url" placeholder="https://tiktok.com/@username">
+<button class="btn btn-primary btn-block" onclick="saveProfile()">حفظ البيانات على هذا الجهاز</button>
+<div id="profileResult"></div>
+<div class="notice">تسجيل الدخول بالبريد الإلكتروني والتحقق برمز OTP غير مفعّلين بعد. سنضيفهما عند ربط Supabase.</div>
+</section>
+</section>
+
+<div class="footer">
+<strong>صارحني</strong> — مساحة للكلام والردود
+<br>نسخة تجريبية أولية
+</div>
+</main>
+
+<script>
+const STORAGE_KEY = "sarhani_demo_v1";
+
+function loadData() {
+try {
+return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+messages: {}, profile: { name: "", instagram: "", tiktok: "" }
+};
+} catch {
+return { messages: {}, profile: { name: "", instagram: "", tiktok: "" } };
+}
+}
+
+function saveData(data) {
+localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function makeId() {
+if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+return Date.now().toString(36) + Math.random().toString(36).slice(2, 12);
+}
+
+function safeText(value) {
+return String(value ?? "").replace(/[&<>"']/g, ch => ({
+"&": "&", "<": "<", ">": ">", '"': """, "'": "'"
+}[ch]));
+}
+
+function showOnly(viewId) {
+["homeView", "messageView", "profileView"].forEach(id => {
+document.getElementById(id).classList.toggle("hidden", id !== viewId);
+});
+document.getElementById("hero").classList.toggle("hidden", viewId !== "homeView");
+window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function goHome() {
+history.replaceState(null, "", location.pathname + location.search);
+showOnly("homeView");
+renderMessages();
+}
+
+function focusComposer() {
+document.getElementById("composer").scrollIntoView({ behavior: "smooth" });
+setTimeout(() => document.getElementById("messageText").focus(), 300);
+}
+
+function createMessage() {
+const sender = document.getElementById("senderName").value.trim() || "زائر صارحني";
+const content = document.getElementById("messageText").value.trim();
+const result = document.getElementById("createResult");
+
+if (!content) {
+result.innerHTML = '<div class="notice warning">اكتب محتوى الرسالة أولًا.</div>';
+return;
+}
+
+const data = loadData();
+const id = makeId();
+data.messages[id] = {
+id, sender, content, createdAt: new Date().toISOString(), replies: []
+};
+saveData(data);
+
+const link = makeLink(id);
+result.innerHTML = &lt;div class="notice success"&gt;تم إنشاء الرسالة في هذا المتصفح.&lt;/div&gt; &lt;label&gt;رابط الرسالة التجريبي&lt;/label&gt; &lt;input id="createdLink" readonly value="${safeText(link)}" dir="ltr">
+<div class="row" style="margin-top:10px">
+<button class="btn btn-primary grow" onclick="copyLink('createdLink')">نسخ الرابط</button>
+<button class="btn btn-light grow" onclick="shareLink('${id}')"&gt;مشاركة&lt;/button&gt; &lt;button class="btn btn-outline grow" onclick="openMessage('${id}')">عرض الرسالة</button>
+</div>
+<div class="notice warning">الرابط لن يعرض بيانات الرسالة على جهاز آخر حتى نربط قاعدة البيانات بالخادم.</div>
+`;
+document.getElementById("messageText").value = "";
+document.getElementById("charCount").textContent = "0 / 3000";
+renderMessages();
+}
+
+function makeLink(id) {
+const url = new URL(location.href);
+url.hash = "message=" + encodeURIComponent(id);
+return url.href;
+}
+
+function openMessage(id) {
+const data = loadData();
+const msg = data.messages[id];
+if (!msg) {
+document.getElementById("messageSender").textContent = "الرسالة غير متاحة";
+document.getElementById("messageContent").textContent =
+"لم يتم العثور على هذه الرسالة في التخزين المحلي لهذا المتصفح. قد تحتاج إلى فتحها من الجهاز الذي أنشأها.";
+document.getElementById("missingMessageNotice").classList.remove("hidden");
+document.getElementById("replyResult").innerHTML = "";
+document.getElementById("replyText").value = "";
+showOnly("messageView");
+return;
+}
+
+document.getElementById("messageSender").textContent = msg.sender;
+document.getElementById("messageAvatar").textContent = (msg.sender || "ص").slice(0, 1);
+document.getElementById("messageContent").textContent = msg.content;
+document.getElementById("missingMessageNotice").classList.add("hidden");
+document.getElementById("replyResult").innerHTML = "";
+document.getElementById("replyText").value = "";
+showOnly("messageView");
+}
+
+function createReply() {
+const id = new URLSearchParams(location.hash.slice(1)).get("message");
+const data = loadData();
+const msg = id ? data.messages[id] : null;
+const content = document.getElementById("replyText").value.trim();
+const name = document.getElementById("replyName").value.trim() || "زائر";
+const result = document.getElementById("replyResult");
+
+if (!msg) {
+result.innerHTML = '<div class="notice warning">لا يمكن حفظ الرد لأن الرسالة الأصلية غير موجودة في هذا المتصفح.</div>';
+return;
+}
+if (!content) {
+result.innerHTML = '<div class="notice warning">اكتب الرد أولًا.</div>';
+return;
+}
+
+const replyId = makeId();
+msg.replies.push({
+id: replyId, sender: name, content,
+createdAt: new Date().toISOString(), parentId: id
+});
+data.messages[id] = msg;
+data.messages[replyId] = {
+id: replyId, sender: name, content,
+createdAt: new Date().toISOString(), replies: [],
+parentId: id, originalSender: msg.sender
+};
+saveData(data);
+
+const link = makeLink(replyId);
+result.innerHTML = &lt;div class="notice success"&gt;تم حفظ الرد محليًا وإنشاء رابط له.&lt;/div&gt; &lt;label&gt;رابط الرد التجريبي&lt;/label&gt; &lt;input id="replyLink" readonly dir="ltr" value="${safeText(link)}">
+<div class="row" style="margin-top:10px">
+<button class="btn btn-primary grow" onclick="copyLink('replyLink')">نسخ الرابط</button>
+<button class="btn btn-light grow" onclick="shareSpecificLink('${replyId}')"&gt;مشاركة الرد&lt;/button&gt; &lt;/div&gt; &lt;div class="notice warning"&gt;هذا الرد محفوظ على جهازك فقط في النسخة الحالية.&lt;/div&gt;;
+renderMessages();
+}
+
+async function copyLink(inputId) {
+const input = document.getElementById(inputId);
+try {
+await navigator.clipboard.writeText(input.value);
+alert("تم نسخ الرابط.");
+} catch {
+input.focus();
+input.select();
+const ok = document.execCommand("copy");
+alert(ok ? "تم نسخ الرابط." : "انسخ الرابط يدويًا.");
+}
+}
+
+async function shareLink(id) {
+await shareSpecificLink(id);
+}
+
+async function shareSpecificLink(id) {
+const link = makeLink(id);
+if (navigator.share) {
+try {
+await navigator.share({ title: "رسالة من صارحني", text: "افتح الرسالة عبر هذا الرابط", url: link });
+} catch (e) {
+if (e.name !== "AbortError") alert("تعذرت المشاركة. يمكنك نسخ الرابط بدلًا من ذلك.");
+}
+} else {
+try {
+await navigator.clipboard.writeText(link);
+alert("المشاركة المباشرة غير مدعومة هنا؛ تم نسخ الرابط.");
+} catch {
+prompt("انسخ الرابط التالي:", link);
+}
+}
+}
+
+function renderMessages() {
+const data = loadData();
+const box = document.getElementById("myMessages");
+const messages = Object.values(data.messages)
+.filter(m => !m.parentId)
+.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+if (!messages.length) {
+box.innerHTML = '<p class="muted">لم تنشئ رسائل بعد.</p>';
+return;
+}
+
+box.innerHTML = messages.map(msg => &lt;div class="list-item"&gt; &lt;strong&gt;${safeText(msg.sender)}</strong>
+<div class="muted">{safeText(msg.content.length > 140 ? msg.content.slice(0, 140) + "…" : msg.content)}</p>
+<div class="row">
+<button class="btn btn-light btn-small" onclick="openMessage('{msg.id}')">مشاركة الرابط</button>
+<button class="btn btn-danger btn-small" onclick="deleteMessage('{msg.replies && msg.replies.length ? <div class="notice"&gt;عدد الردود المحفوظة محليًا: ${msg.replies.length}&lt;/div> : ""}
+</div>
+`).join("");
+}
+
+function deleteMessage(id) {
+if (!confirm("هل تريد حذف الرسالة من هذا الجهاز؟")) return;
+const data = loadData();
+delete data.messages[id];
+Object.keys(data.messages).forEach(key => {
+const m = data.messages[key];
+if (m.parentId === id) delete data.messages[key];
+else if (m.replies) m.replies = m.replies.filter(r => r.id !== id);
+});
+saveData(data);
+renderMessages();
+}
+
+function showProfile() {
+const profile = loadData().profile;
+document.getElementById("profileName").value = profile.name || "";
+document.getElementById("profileInstagram").value = profile.instagram || "";
+document.getElementById("profileTiktok").value = profile.tiktok || "";
+document.getElementById("profileDisplayName").textContent = profile.name || "زائر صارحني";
+document.getElementById("profileAvatar").textContent = (profile.name || "ص").slice(0, 1);
+document.getElementById("profileResult").innerHTML = "";
+showOnly("profileView");
+}
+
+function validSocialLink(value) {
+if (!value) return true;
+try {
+const url = new URL(value);
+return url.protocol === "https:" &&
+(url.hostname === "instagram.com" || url.hostname.endsWith(".instagram.com") ||
+url.hostname === "www.instagram.com" ||
+url.hostname === "tiktok.com" || url.hostname.endsWith(".tiktok.com") ||
+url.hostname === "www.tiktok.com");
+} catch { return false; }
+}
+
+function saveProfile() {
+const name = document.getElementById("profileName").value.trim();
+const instagram = document.getElementById("profileInstagram").value.trim();
+const tiktok = document.getElementById("profileTiktok").value.trim();
+const result = document.getElementById("profileResult");
+
+if (!validSocialLink(instagram) || !validSocialLink(tiktok)) {
+result.innerHTML = '<div class="notice warning">أدخل رابطًا صحيحًا يبدأ بـ https ومن Instagram أو TikTok.</div>';
+return;
+}
+
+const data = loadData();
+data.profile = { name, instagram, tiktok };
+saveData(data);
+document.getElementById("profileDisplayName").textContent = name || "زائر صارحني";
+document.getElementById("profileAvatar").textContent = (name || "ص").slice(0, 1);
+result.innerHTML = '<div class="notice success">تم حفظ بيانات الملف على هذا الجهاز.</div>';
+}
+
+document.getElementById("messageText").addEventListener("input", function() {
+document.getElementById("charCount").textContent = this.value.length + " / 3000";
+});
+
+// تحميل الاسم المحفوظ محليًا، ثم فتح الرسالة الموجودة في الرابط إن وجدت.
+(function init() {
+const data = loadData();
+document.getElementById("senderName").value = data.profile.name || "";
+renderMessages();
+const id = new URLSearchParams(location.hash.slice(1)).get("message");
+if (id) openMessage(id);
+})();
+</script>
+</body>
+</html>
